@@ -336,7 +336,7 @@ static char *md5crypt(const char *passwd, const char *magic, const char *salt)
     out_buf[0] = 0;
     magic_len = strlen(magic);
 
-    if (*magic != 0) {
+    if (magic_len > 0) {
         out_buf[0] = '$';
         out_buf[1] = 0;
 
@@ -353,7 +353,7 @@ static char *md5crypt(const char *passwd, const char *magic, const char *salt)
         return NULL;
 
     salt_out = out_buf;
-    if (*magic)
+    if (magic_len > 0)
         salt_out += 2 + magic_len;
     salt_len = strlen(salt_out);
 
@@ -366,7 +366,7 @@ static char *md5crypt(const char *passwd, const char *magic, const char *salt)
         || !EVP_DigestUpdate(md, passwd, passwd_len))
         goto err;
 
-    if (*magic)
+    if (magic > 0)
         if (!EVP_DigestUpdate(md, "$", 1)
             || !EVP_DigestUpdate(md, magic, magic_len)
             || !EVP_DigestUpdate(md, "$", 1))
